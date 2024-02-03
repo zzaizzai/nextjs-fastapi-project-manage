@@ -1,5 +1,5 @@
 import React from 'react';
-import Post from './Post';
+import Posts from './Post';
 import Link from "next/link";
 
 export default async function ListItem() {
@@ -12,7 +12,8 @@ export default async function ListItem() {
       <Link href={'/posts/create'} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
         New Post
       </Link>
-      <Post></Post>
+      {/* @ts-expect-error Server Component */}
+      <Posts></Posts>
     </div>
   );
 }
