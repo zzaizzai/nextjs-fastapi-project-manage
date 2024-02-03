@@ -76,3 +76,11 @@ To learn more about Next.js, take a look at the following resources:
 - [FastAPI Documentation](https://fastapi.tiangolo.com/) - learn about FastAPI features and API.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+
+
+```
+venv\Scripts\activate
+(venv)python -m pip install -r requirements.txt
+(venv)cd api
+uvicorn index:app --host 127.0.0.1 --port 8000 --reload
+```
