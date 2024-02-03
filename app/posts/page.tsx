@@ -2,7 +2,7 @@ import React from 'react';
 import Post from './Post';
 import Link from "next/link";
 
-export default function ListItem() {
+export default async function ListItem() {
 
   return (
     <div>
