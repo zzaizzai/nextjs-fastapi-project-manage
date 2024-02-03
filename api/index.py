@@ -10,6 +10,22 @@ app = FastAPI()
 def hello_world():
     return {"message": "Hello World"}
 
+
+@app.get("/api/all/posts")
+def all_posts():
+    conn = db_manager.get_conn()
+    cursor = conn.cursor()
+    # test 테이블에서 모든 데이터 가져오기
+    cursor.execute("select * from posts")
+    
+    items = fetch_all_as_dict(cursor)
+
+    conn.commit()
+    cursor.close()
+    return items
+
+
+
 @app.get("/api/test")
 def get_test_data():
     try:
