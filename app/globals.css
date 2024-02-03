@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.navbar {
+    background-color: gray;
+}
+
+.navitem {
+    color: white;
+    text-decoration-line: none;
+}

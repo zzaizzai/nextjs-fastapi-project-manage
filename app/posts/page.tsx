@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useEffect } from 'react';
+import Post from './Post';
 
 export default function ListItem(){
   useEffect(() => {
@@ -18,8 +19,14 @@ export default function ListItem(){
 
   return (
     <div>
-
-        hello
+      <div className='ab'>button</div>
+      <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+        New Post
+      </button>
+      <Post></Post>
     </div>
   );
 }
+
+
+
