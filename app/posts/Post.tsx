@@ -32,11 +32,16 @@ function Post({ post }: any) {
                     <div className="px-1 w-40 flex-auto bg-blue-500 text-white rounded">
                         Start:
                     </div>
-                    <div className='px-1 w-40 flex-auto'>
+                    <div className='mx-1'>
+                        ~
+                    </div>
+                    <div className='px-1 w-40 flex-auto bg-red-300 text-white rounded"'>
                         Due:
                     </div>
                 </div>
-
+                <div className=''>
+                    {post.content ?? 'Content......'}
+                </div>
             </div>
         </div>
     )
