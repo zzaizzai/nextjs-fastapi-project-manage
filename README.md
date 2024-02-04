@@ -84,3 +84,13 @@ venv\Scripts\activate
 (venv)cd api
 uvicorn index:app --host 127.0.0.1 --port 8000 --reload
 ```
+
+
+```env
+POSTGRES_URL=
+POSTGRES_URL_NON_POOLING=
+POSTGRES_USER=
+POSTGRES_HOST=
+POSTGRES_PASSWORD=
+POSTGRES_DATABASE=
+```

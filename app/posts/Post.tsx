@@ -35,7 +35,7 @@ function Post({ post }: any) {
                     <div className='mx-1'>
                         ~
                     </div>
-                    <div className='px-1 w-40 flex-auto bg-red-300 text-white rounded"'>
+                    <div className='px-1 w-40 flex-auto bg-red-300 text-white rounded'>
                         Due:
                     </div>
                 </div>
