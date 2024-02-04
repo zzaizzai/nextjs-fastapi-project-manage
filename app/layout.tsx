@@ -25,7 +25,10 @@ export default function RootLayout({
             <Link className='navitem bg-blue-500 text-white hover:bg-blue-700 rounded flex items-center px-4' href="/">home</Link>
             <Link className='navitem bg-blue-500 text-white hover:bg-blue-700 rounded flex items-center px-4' href="/posts">posts</Link>
           </nav>
-          {children}</div>
+          <div className='ml-8'>
+            {children}
+          </div>
+        </div>
       </body>
     </html>
   )

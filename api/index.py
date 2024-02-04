@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from decouple import config
 import psycopg2
 from db import db_manager, fetch_all_as_dict
-
+from pydantic import BaseModel
 app = FastAPI()
 
 
@@ -23,6 +23,23 @@ def all_posts():
     conn.commit()
     cursor.close()
     return items
+
+class PostCreate(BaseModel):
+    title: str
+    user_id: int
+    content: str
+
+@app.post("/api/posts/create")
+def create_post(post_data: PostCreate):
+    title = post_data.title
+    content = post_data.content
+    user_id = post_data.user_id
+
+    print("title:", title)
+    print("content:", content)
+    print("user_id:", user_id)
+    
+    return {"message": "Post created successfully"}
 
 
 
