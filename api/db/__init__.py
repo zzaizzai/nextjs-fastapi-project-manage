@@ -7,11 +7,13 @@ import psycopg2
 POSTGRES_URL = config('POSTGRES_URL')
 
 
+def get_connection():
+    return psycopg2.connect(POSTGRES_URL)
+
 class DatabaseManager:
-    def __init__(self):
-        self.conn = psycopg2.connect(POSTGRES_URL)
-    
+        
     def get_conn(self):
+        self.conn = psycopg2.connect(POSTGRES_URL)
         return self.conn
     
     def get_cursor(self):

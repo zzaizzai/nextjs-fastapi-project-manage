@@ -9,13 +9,15 @@ interface FormData {
     title: string;
     content: string;
     user_id: number;
+    start_date: string;
+    end_date: string
 }
 
 export default function ListItem({ history }: any) {
     const router = useRouter()
 
 
-    const [formData, setFormData] = useState<FormData>({ title: '', content: '', user_id: 1 });
+    const [formData, setFormData] = useState<FormData>({ title: '', content: '', user_id: 1, start_date: '2024-02-03', end_date: '2024-02-05' });
     const [msg, setMsg] = useState<string>("");
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -31,12 +33,12 @@ export default function ListItem({ history }: any) {
         // Check
         if (formData.title == "") {
             setMsg("title is empty")
-            return 
+            return
         }
 
         if (formData.content == "") {
             setMsg("content is empty")
-            return 
+            return
         }
 
         // Send an AJAX request to the API endpoint
@@ -55,8 +57,11 @@ export default function ListItem({ history }: any) {
 
     return (
         <div>
+            <h2>create new post</h2>
             <form className='m-2 flex flex-col' onSubmit={handleSubmit}>
-                <div>create new post</div>
+
+
+                Title
                 <input
                     placeholder='title'
                     type="text"
@@ -64,6 +69,8 @@ export default function ListItem({ history }: any) {
                     value={formData.title}
                     onChange={handleInputChange}
                 />
+
+                Content
                 <input
                     placeholder='content'
                     type="text"
@@ -73,8 +80,9 @@ export default function ListItem({ history }: any) {
                 />
 
 
+
                 <input
-                    hidden  
+                    hidden
                     placeholder='user_id'
                     type="text"
                     name="user_id"
@@ -82,6 +90,12 @@ export default function ListItem({ history }: any) {
                     onChange={handleInputChange}
                 />
 
+
+                Start Date
+                <input type="date" name='start_date' value={formData.start_date} onChange={handleInputChange} />
+
+                End Date
+                <input type="date" name='end_date' value={formData.end_date} onChange={handleInputChange} />
                 <button>submit</button>
             </form>
 

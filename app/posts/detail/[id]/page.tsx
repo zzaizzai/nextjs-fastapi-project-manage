@@ -1,6 +1,8 @@
 import { sql } from "@vercel/postgres";
 import { redirect } from 'next/navigation'
 
+
+
 export default async function PostDetail(props: any) {
     const { rows } = await sql`
         select * from posts where id = ${props.params.id} limit 1;
@@ -8,15 +10,24 @@ export default async function PostDetail(props: any) {
     const item = rows[0]
 
     if (!item) {
+        console.log('no item')
         redirect('/posts')
     }
-    
+
     return (
-        <div className="m-5">
-            detail page
-            <div>{item.id ?? 'id'}</div>
-            <div>{item.title ?? 'title'}</div>
-            <div>{item.content ?? 'content'}</div>
-        </div>
+        <table className="m-5">
+            <tr>
+                <th>ID</th>
+                <td>{item.id ?? 'id'}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{item.title ?? 'title'}</td>
+            </tr>
+            <tr>
+                <th>Content</th>
+                <td>{item.content ?? 'content'}</td>
+            </tr>
+        </table>
     );
 }

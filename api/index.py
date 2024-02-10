@@ -1,7 +1,5 @@
 from fastapi import FastAPI
-from decouple import config
-import psycopg2
-from db import db_manager, fetch_all_as_dict
+from db import db_manager, fetch_all_as_dict, get_connection
 from pydantic import BaseModel
 app = FastAPI()
 
@@ -13,92 +11,97 @@ def hello_world():
 
 @app.get("/api/all/posts")
 def all_posts():
-    conn = db_manager.get_conn()
-    cursor = conn.cursor()
-    # test 테이블에서 모든 데이터 가져오기
-    cursor.execute("select * from posts")
     
-    items = fetch_all_as_dict(cursor)
-
-    conn.commit()
-    cursor.close()
-    return items
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("select * from posts")
+            rows = cur.fetchall()
+            
+    return rows
 
 class PostCreate(BaseModel):
     title: str
     user_id: int
     content: str
+    start_date: str
+    end_date: str
 
 @app.post("/api/posts/create")
 def create_post(post_data: PostCreate):
-    title = post_data.title
-    content = post_data.content
-    user_id = post_data.user_id
-
-    print("title:", title)
-    print("content:", content)
-    print("user_id:", user_id)
+        
+    conn = get_connection()
     
-    return {"message": "Post created successfully"}
+    try:
+        with conn.cursor() as cur:  
+            cur.execute("INSERT INTO posts (title, user_id, content, start_date, end_date) VALUES (%s, %s, %s, %s, %s)",
+                    (post_data.title, post_data.user_id, post_data.content, post_data.start_date, post_data.end_date))
+            conn.commit()
+            
+        return {"message": "Post created successfully"}
+        
+    except Exception as e:
+        conn.rollback()
+        return {"message": f"Error: {str(e)}"}
+    
+    finally:
+        conn.close()
 
 
 
 @app.get("/api/test")
 def get_test_data():
+    
+    conn = get_connection()
+    
     try:
-        # PostgreSQL에 연결
-        conn = db_manager.get_conn()
-
-        # 커서 생성
-        cursor = conn.cursor()
-
-        # test 테이블에서 모든 데이터 가져오기
-        cursor.execute("SELECT * FROM test")
-        
-        items = fetch_all_as_dict(cursor)
-        # 데이터 출력
-        print(items)
-
-        # 커밋 및 연결 닫기
-        conn.commit()
-        cursor.close()
-
-        return {"message": "Data retrieved and printed."}
+        with conn.cursor() as cur:  
+            cur.execute("SELECT * FROM test")
+            items =  cur.fetchall()
+            print(items)
+            
+        return {"message": str(items)}
+            
     except Exception as e:
         return {"error": str(e)}
     
-    
+    finally:
+        conn.close()
+
 
 @app.get("/api/create/tables")
 def create_tables():
-    try:
-        # 커서 생성
-        conn = db_manager.get_conn()
-        cursor = conn.cursor()
-
-        # 만약 'posts' 테이블이 이미 존재한다면 삭제
-        cursor.execute("DROP TABLE IF EXISTS posts")
-
-        # 'posts' 테이블 생성
-        cursor.execute("""
-            CREATE TABLE posts (
-                id SERIAL PRIMARY KEY,
-                title TEXT,
-                author_id INTEGER,
-                content TEXT
-            )
-        """)
-        cursor.execute("INSERT INTO posts (title, author_id, content) VALUES ('post1','1', 'test1 content')")
-        cursor.execute("INSERT INTO posts (title, author_id, content) VALUES ('post2','1', 'test1 content')")
-        cursor.execute("INSERT INTO posts (title, author_id, content) VALUES ('post3','1', 'test1 content')")
-        # 커밋 및 연결 닫기
-        conn.commit()
+    
+    conn = get_connection()
         
+    try:
+        with conn.cursor() as cur:  
+            # 커서 생성
+
+            # 만약 'posts' 테이블이 이미 존재한다면 삭제
+            cur.execute("DROP TABLE IF EXISTS posts")
+
+            # 'posts' 테이블 생성
+            cur.execute("""
+                CREATE TABLE posts (
+                    id SERIAL PRIMARY KEY,
+                    title TEXT,
+                    user_id INTEGER,
+                    content TEXT,
+                    start_date DATE,
+                    end_date DATE
+                )
+            """)
+            cur.execute("INSERT INTO posts (title, user_id, content) VALUES ('post1','1', 'test1 content')")
+            cur.execute("INSERT INTO posts (title, user_id, content) VALUES ('post2','1', 'test1 content')")
+            cur.execute("INSERT INTO posts (title, user_id, content) VALUES ('post3','1', 'test1 content')")
+            cur.execute("INSERT INTO posts (title, user_id, content) VALUES ('post4','1', 'test1 content')")
+            
+            conn.commit()
+            
+        return {"message": "Table 'posts' created."}
     except Exception as e:
         conn.rollback()
         raise e
     finally:
-        cursor.close()
+        conn.close()
         
-    print('create tables done')
-    return {"message": "Table 'posts' created."}
