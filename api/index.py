@@ -46,7 +46,25 @@ def create_post(post_data: PostCreate):
     finally:
         conn.close()
 
+@app.get("/api/posts/all")
+def get_all_posts():
 
+        
+    conn = get_connection()
+    
+    try:
+        with conn.cursor() as cur:  
+            cur.execute("SELECT * FROM posts")
+            items = fetch_all_as_dict(cur)
+            print(items)
+            
+        return items
+            
+    except Exception as e:
+        return 'error'
+    
+    finally:
+        conn.close()
 
 @app.get("/api/test")
 def get_test_data():
@@ -56,7 +74,7 @@ def get_test_data():
     try:
         with conn.cursor() as cur:  
             cur.execute("SELECT * FROM test")
-            items =  cur.fetchall()
+            items = fetch_all_as_dict(cur)
             print(items)
             
         return {"message": str(items)}

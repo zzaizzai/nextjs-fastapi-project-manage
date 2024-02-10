@@ -1,23 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import Link from "next/link";
-import { sql } from "@vercel/postgres";
-
 
 export const dynamic = 'force-dynamic'
 
+type Post = {
+  id: number;
+  title: string;
+  content: string;
+  author: string; 
+  start_date: string;
+  due_date: string; 
+};
 
+const getPosts = async (): Promise<Post[]> => {
+  try {
+    const response = await fetch("http://localhost:3000/api/posts/all");
+    if (!response.ok) {
+      throw new Error("Failed to fetch posts");
+    }
+    const posts: Post[] = await response.json()
+    console.log(posts);
+    return posts;
+  } catch (error) {
+    console.error("Error:", error);
+    return [];
+  }
+};
 
 export default async function Posts() {
-  var page = 0
 
-  const { rows } = await sql`
-      select * from posts;
-  `
+  const rows = await getPosts()
   console.log(rows)
+
   return (
     <div>
       <br />
-      
+
       <Link href={'/posts/create'} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
         New Post
       </Link>

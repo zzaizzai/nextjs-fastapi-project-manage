@@ -2,6 +2,8 @@ import { sql } from "@vercel/postgres";
 import { redirect } from 'next/navigation'
 
 
+export const dynamic = 'force-dynamic'
+
 
 export default async function PostDetail(props: any) {
     const { rows } = await sql`
