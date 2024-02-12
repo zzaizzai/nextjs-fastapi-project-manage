@@ -28,8 +28,6 @@ export default function ListItem({ history }: any) {
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        console.log(formData)
-
         // Check
         if (formData.title == "") {
             setMsg("title is empty")
@@ -53,6 +51,7 @@ export default function ListItem({ history }: any) {
             })
             .catch((error) => {
                 console.error('Error:', error);
+                setMsg(error)
             });
     };
 
@@ -100,7 +99,9 @@ export default function ListItem({ history }: any) {
                 <button>submit</button>
             </form>
 
-            {msg}
+            <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
+                <span className="block sm:inline">{msg}</span>
+            </div>
         </div>
     );
 }
