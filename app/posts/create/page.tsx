@@ -48,6 +48,7 @@ export default function ListItem({ history }: any) {
                 if (response.status === 200) {
                     // Redirect to another page (e.g., '/success') using React Router
                     router.push('/posts');
+                    router.refresh();
                 }
             })
             .catch((error) => {

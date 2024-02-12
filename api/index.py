@@ -106,7 +106,8 @@ def create_tables():
                     user_id INTEGER,
                     content TEXT,
                     start_date DATE,
-                    end_date DATE
+                    end_date DATE,
+                    datetime_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             """)
             cur.execute("INSERT INTO posts (title, user_id, content) VALUES ('post1','1', 'test1 content')")
