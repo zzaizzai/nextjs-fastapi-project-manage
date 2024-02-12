@@ -1,6 +1,7 @@
 from fastapi import FastAPI
-from db import db_manager, fetch_all_as_dict, get_connection
 from pydantic import BaseModel
+
+from db import fetch_all_as_dict, get_connection
 app = FastAPI()
 
 
